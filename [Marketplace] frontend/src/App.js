@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Socket from "./Socket.config";
 import Login from "./Login";
-import Notifications from "./Notifications";
+import Products from "./Products";
 
 function App() {
   const [logedInUser, setLogedInUser] = useState();
@@ -34,7 +34,7 @@ function App() {
               Logout
             </button>
           </h1>
-          <Notifications />
+          <Products user={logedInUser} />
         </>
       ) : (
         <Login setUser={setLogedInUser} />

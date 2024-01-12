@@ -10,7 +10,6 @@ export default class SocketConfig {
   }
 
   static setSocketApp(app: any) {
-    console.log("server passed to Socket");
     SocketConfig._app = app;
   }
 
@@ -18,6 +17,7 @@ export default class SocketConfig {
     if (!SocketConfig._instance && SocketConfig._app) {
       SocketConfig._instance = new SocketConfig();
     }
+
     return SocketConfig._instance;
   }
   setupConfig() {
@@ -26,7 +26,6 @@ export default class SocketConfig {
         origin: "*",
       },
     });
-    console.log("socket connection up and running");
     return io;
   }
 }

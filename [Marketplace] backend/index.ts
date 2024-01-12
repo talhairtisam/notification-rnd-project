@@ -3,9 +3,8 @@ import cors from "cors";
 import { createServer } from "http";
 import RedisService from "./redis.config";
 // import subscriber from "./subscriber";
-// import reservation from "./reservation";
+import reservation from "./reservation";
 import SocketConfig from "./socket.config";
-import reservationSubscriber from "./reservation.subscriber";
 
 const app = express();
 app.use(cors());
@@ -20,29 +19,27 @@ const socketInstance = SocketConfig.getInstance();
 //   console.log(message, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 // });
 
-reservationSubscriber();
-
 socketInstance.io.on("connection", (socket: any) => {
-  const { userId } = socket.handshake.query;
-  if (userId) {
+  const { username } = socket.handshake.query;
+  if (username) {
     RedisService.initRedis().then((redisClient: any) => {
-      redisClient.sAdd(userId, socket.id);
+      redisClient.sAdd(username, socket.id);
       socket.emit("initiate", "Welcome to Socket Connection");
     });
   }
 
   socket.on("disconnect", () => {
-    if (userId) {
+    if (username) {
       RedisService.initRedis().then((redisClient: any) => {
-        redisClient.sRem(userId, socket.id);
+        redisClient.sRem(username, socket.id);
         console.log("Sockets Disconnected.");
       });
     }
   });
 });
 
-// app.use("/reserve", reservation);
+app.use("/reserve", reservation);
 
-httpServer.listen(5008, () => {
-  console.log("listening on port 5008");
+httpServer.listen(5009, () => {
+  console.log("listening on port 5009");
 });
