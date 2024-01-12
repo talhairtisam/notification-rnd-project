@@ -1,7 +1,7 @@
 import express from "express";
-import RedisService from "./redis.config";
-import publisher from "./publisher";
-import SocketConfig from "./socket.config";
+import RedisService from "../utils/redis.config";
+import publisher from "../utils/pubsub/publisher";
+import SocketConfig from "../utils/socket.config";
 
 const app = express();
 

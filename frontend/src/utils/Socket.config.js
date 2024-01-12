@@ -24,7 +24,7 @@ export default class Socket {
   static getConnection(userId) {
     Socket.socket = io("http://localhost:5008", {
       query: {
-        userId: userId,
+        userId: "seller:" + userId,
       },
     });
   }

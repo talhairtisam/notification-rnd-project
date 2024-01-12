@@ -1,8 +1,8 @@
-import express from "express"
+import express from "express";
 const app = express();
 
-import publisher from "./publisher";
-import subscriber from "./subscriber";
+import publisher from "./utils/pubsub/publisher";
+import subscriber from "./utils/pubsub/subscriber";
 subscriber.subscribe();
 const port = 3000;
 
@@ -15,7 +15,6 @@ app.get("/", (req: any, res: any) => {
     body: message,
     to: "investor@tld.com",
   };
-
 
   // publisher.publish(channel, JSON.stringify(m));
   publisher.publish("sms", JSON.stringify(m));

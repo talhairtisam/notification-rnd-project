@@ -1,11 +1,12 @@
 import express from "express";
 import cors from "cors";
 import { createServer } from "http";
-import RedisService from "./redis.config";
+import RedisService from "./utils/redis.config";
 // import subscriber from "./subscriber";
 // import reservation from "./reservation";
-import SocketConfig from "./socket.config";
-import reservationSubscriber from "./reservation.subscriber";
+import SocketConfig from "./utils/socket.config";
+import reservationSubscriber from "./subscribers/reservation.subscriber";
+import users from "./controllers/users.controller";
 
 const app = express();
 app.use(cors());
@@ -25,6 +26,7 @@ reservationSubscriber();
 socketInstance.io.on("connection", (socket: any) => {
   const { userId } = socket.handshake.query;
   if (userId) {
+    console.log(userId);
     RedisService.initRedis().then((redisClient: any) => {
       redisClient.sAdd(userId, socket.id);
       socket.emit("initiate", "Welcome to Socket Connection");
@@ -41,7 +43,26 @@ socketInstance.io.on("connection", (socket: any) => {
   });
 });
 
-// app.use("/reserve", reservation);
+app.use("/users", users);
+
+app.use((err: any, req: any, res: any, next: any) => {
+  // if (err.code === 401) {
+  //   err.status = 401;
+  //   const origin = req.get("origin");
+  //   if (!origin) {
+  //     res.clearCookie("accessToken", domain(process.env.NODE_ENV.replace(" ", "")));
+  //   } else {
+  //     res.clearCookie(process.env.SELLER_ACCESS_TOKEN, domain(process.env.NODE_ENV.replace(" ", "")));
+  //   }
+  // }
+  // if (err.isJoi) err.status = 422;
+  return res.status(err.status || 500).send({
+    error: {
+      status: err.status || 500,
+      message: err.message,
+    },
+  });
+});
 
 httpServer.listen(5008, () => {
   console.log("listening on port 5008");

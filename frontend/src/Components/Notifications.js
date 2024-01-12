@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Socket from "./Socket.config";
+import Socket from "../utils/Socket.config";
 
 export default function Notifications() {
   // const { socket, getConnecion, disconnect } = useSocket();

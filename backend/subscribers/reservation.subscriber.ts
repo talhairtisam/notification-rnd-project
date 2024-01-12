@@ -1,6 +1,6 @@
-import SocketConfig from "./socket.config";
-import subscriber from "./subscriber";
-import RedisService from "./redis.config";
+import SocketConfig from "../utils/socket.config";
+import subscriber from "../utils/pubsub/subscriber";
+import RedisService from "../utils/redis.config";
 
 const reservationSubscriber = () => {
   const socketInstance = SocketConfig.getInstance();

@@ -1,5 +1,5 @@
 import async from "async";
-import channels from "./channels";
+import channels from "../channels";
 import { createClient } from "redis";
 
 class Subscriber {
