@@ -5,6 +5,9 @@ import RedisService from "./redis.config";
 // import subscriber from "./subscriber";
 import reservation from "./reservation";
 import SocketConfig from "./socket.config";
+import signup from "./signup";
+import signin from "./signin"
+import product from './products'
 
 const app = express();
 app.use(cors());
@@ -39,6 +42,10 @@ socketInstance.io.on("connection", (socket: any) => {
 });
 
 app.use("/reserve", reservation);
+app.use("/signin",signin )
+app.use('/signup',signup )
+app.use('/products',product)
+
 
 httpServer.listen(5009, () => {
   console.log("listening on port 5009");

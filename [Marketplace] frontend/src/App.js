@@ -37,7 +37,7 @@ function App() {
           <Products user={logedInUser} />
         </>
       ) : (
-        <Login setUser={setLogedInUser} />
+        <Login user={logedInUser} setUser={setLogedInUser} />
       )}
     </div>
   );

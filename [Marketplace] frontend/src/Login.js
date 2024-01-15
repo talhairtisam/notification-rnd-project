@@ -1,8 +1,26 @@
 import React, { useEffect, useState } from "react";
 import Socket from "./Socket.config";
+import axios from "axios";
 
-export default function Login({ setUser }) {
+export default function Login({user ,setUser }) {
   const [username, setUsername] = useState("");
+
+  // const getUser=async ()=>{
+  //   await axios.post('http://localhost:5009/signin',{username:username}).then((res)=>{
+  //     Socket.getConnection(username);
+
+  //     setUser(res)
+      
+  //   }).catch((err)=>{
+  //     console.log(err)
+  //   })
+  // }
+
+  // useEffect(()=>{
+  //   getUser()
+  // },[])
+
+
 
   return (
     <div>
@@ -14,8 +32,7 @@ export default function Login({ setUser }) {
             e.preventDefault();
             if (username.length > 0) {
               Socket.getConnection(username);
-              setUser(username);
-            }
+                      }
           }}
         >
           Login

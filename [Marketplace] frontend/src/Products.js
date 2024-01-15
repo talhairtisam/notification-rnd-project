@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Socket from "./Socket.config";
 import axios from "axios";
-
+import { Form } from "react-router-dom";
 const productList = [
   {
     id: 1,
@@ -77,17 +77,54 @@ const productList = [
   },
 ];
 export default function Products({ user }) {
+  const [Pname, setPName] = useState("");
+  const [price, setPrice] = useState();
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [data,setData]=useState()
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    // Use name to distinguish between different input fields
+    if (name === "productName") {
+      setPName(value);
+    } else if (name === "price") {
+      setPrice(value);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios.post(`http://localhost:5009/products`, { title: Pname, price: price,shop_id: 2});
+    setIsSubmitted(true)
+  };
+
+  const getProduct=async()=>{
+    await axios.get(`http://localhost:5009/products`).then((res)=>{
+      setData(res.data[0])
+    }).catch((err)=>{
+      console.log(err)
+    })
+    
+  }
+  useEffect(()=>{
+  
+    getProduct()
+  },[isSubmitted])
+
+
+  console.log(data);
+
   return (
     <div>
       <h2>Products</h2>
       <ul>
-        {productList.map((product) => (
+    
+        {data?.map((product) => (
           <li key={product.id}>
-            {product.name} (of user {product.userId}) - <strong>{product.price}</strong>
+            {product?.title} (of user {product?.shop_id}) - <strong>{product?.price}</strong>
             {"    "}
             <button
               onClick={() => {
-                axios.post(`http://localhost:5009/reserve`, { userId: product.userId, productId: product.id, productName: product.name, username: user });
+                axios.post(`http://localhost:5009/reserve`, { userId: product.shop_id, productId: product.id, productName: product.title, username: user });
               }}
             >
               Reserve
@@ -95,6 +132,12 @@ export default function Products({ user }) {
           </li>
         ))}
       </ul>
+
+      <form onSubmit={handleSubmit}>
+        <input type="text" placeholder="product name" name="productName" value={Pname} onChange={handleChange} />
+        <input type="number" placeholder="price" name="price" value={price} onChange={handleChange} />
+        <button type="submit">Submit</button>
+      </form>
     </div>
   );
 }

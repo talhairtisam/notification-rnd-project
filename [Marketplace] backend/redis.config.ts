@@ -1,6 +1,6 @@
 import { createClient } from "redis";
 const initRedis = () => {
-  const client = createClient({ url: "redis://localhost:6379" });
+  const client = createClient({url: "redis://localhost:6379"});
   client.connect();
   return new Promise((res, rej) => {
     client.on("connect", function () {
