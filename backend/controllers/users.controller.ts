@@ -20,10 +20,10 @@ app.post("/login", async (req, res, next) => {
   try {
     const { username } = req.body;
     const result = await Users.login(username);
-    if (result.status === "failed") {
-      res.status(401).send({ message: "Incorrect username" });
+    if (result.length > 0) {
+      res.status(200).send({ message: "User Login successfully", status: "success", user: result[0] });
     } else {
-      res.status(200).send({ message: "User Login successfully", user: result.user });
+      res.status(401).send({ message: "Incorrect username", status: "failed", user: null });
     }
   } catch (err) {
     next(err);

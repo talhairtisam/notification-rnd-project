@@ -7,6 +7,7 @@ import RedisService from "./utils/redis.config";
 import SocketConfig from "./utils/socket.config";
 import reservationSubscriber from "./subscribers/reservation.subscriber";
 import users from "./controllers/users.controller";
+import products from "./controllers/products.controller";
 
 const app = express();
 app.use(cors());
@@ -26,7 +27,6 @@ reservationSubscriber();
 socketInstance.io.on("connection", (socket: any) => {
   const { userId } = socket.handshake.query;
   if (userId) {
-    console.log(userId);
     RedisService.initRedis().then((redisClient: any) => {
       redisClient.sAdd(userId, socket.id);
       socket.emit("initiate", "Welcome to Socket Connection");
@@ -44,6 +44,7 @@ socketInstance.io.on("connection", (socket: any) => {
 });
 
 app.use("/users", users);
+app.use("/products", products);
 
 app.use((err: any, req: any, res: any, next: any) => {
   // if (err.code === 401) {

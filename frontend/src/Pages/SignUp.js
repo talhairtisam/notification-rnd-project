@@ -23,7 +23,7 @@ export default function SignUp({ setUser }) {
         navigate("/");
       }
     } catch (err) {
-      setError(err.message);
+      setError(err.response.data.message);
     }
   };
 
@@ -34,7 +34,7 @@ export default function SignUp({ setUser }) {
       </div>
       <div>
         <h1>SignUp</h1>
-        {error.length > 0 && <p style={{ color: "red" }}>{error}</p>}
+        <p style={{ color: "red" }}>{error.length > 0 && error}</p>
         <form onSubmit={handleSubmit}>
           <input type="text" name="shop_name" placeholder="Shop Name: alpineShop" value={formInput.shop_name} onChange={handleInputOnChange} />
           <br />

@@ -1,8 +1,9 @@
 import React from "react";
 import Notifications from "../Components/Notifications";
 import { Outlet, useNavigate } from "react-router-dom";
+import Socket from "../utils/Socket.config";
 
-export default function Home({}) {
+export default function Home({ setUser }) {
   const navigate = useNavigate();
   return (
     <div style={{ display: "flex" }}>
@@ -32,7 +33,9 @@ export default function Home({}) {
           </button>
           <button
             onClick={() => {
-              //   navigate("/reservations");
+              Socket.disconnect();
+              setUser(undefined);
+              navigate("/login");
             }}
           >
             Logout

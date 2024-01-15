@@ -35,12 +35,12 @@ function App() {
             path="*"
             element={
               <Routes>
-                <Route path="/" element={<Home />}>
+                <Route path="/" element={<Home setUser={setLogedInUser} />}>
                   <Route index element={<Dashboard />} />
                   <Route path="products" element={<Outlet />}>
-                    <Route index element={<Products />} />
-                    <Route path="add" element={<AddProduct />} />
-                    <Route path=":productId" element={<Product />} />
+                    <Route index element={<Products user={logedInUser} />} />
+                    <Route path="add" element={<AddProduct user={logedInUser} />} />
+                    <Route path=":productId" element={<Product user={logedInUser} />} />
                   </Route>
                   <Route path="reservations" element={<Reservations />} />
                   <Route path="*" element={<Navigate to="/" />} />

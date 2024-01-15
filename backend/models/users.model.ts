@@ -41,13 +41,9 @@ export default class users {
   }
   static async login(username: any) {
     try {
-      const registerShopQuery = `SELECT s.shop_id, s.shop_name, su.first_name, su.last_name, su.user_id FROM shops s JOIN seller_users su ON su.shop_id = s.shop_id WHERE s.shop_name = ?`;
+      const registerShopQuery = `SELECT s.shop_id, s.shop_name, su.first_name, su.last_name, su.user_id FROM shops s JOIN seller_users su ON su.shop_id = s.shop_id WHERE su.username = ?`;
       const [registerShopResult]: any = await db.query(registerShopQuery, username);
-      if (registerShopResult.length > 0) {
-        return { status: "success", user: registerShopResult[0] };
-      } else {
-        return { status: "failed", user: null };
-      }
+      return registerShopResult;
     } catch (err) {
       throw err;
     }
