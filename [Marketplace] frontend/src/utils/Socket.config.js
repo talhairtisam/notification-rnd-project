@@ -4,10 +4,10 @@ export default class Socket {
   static socket;
 
   constructor() {}
-  static getConnection(username) {
+  static getConnection(userId) {
     Socket.socket = io("http://localhost:5009", {
       query: {
-        username: username,
+        userId: "marketplace:" + userId,
       },
     });
   }

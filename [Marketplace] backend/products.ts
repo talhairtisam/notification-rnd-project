@@ -4,13 +4,13 @@ import pool from "./Configs/db";
 const app = express();
 app.get("/", async (req, res) => {
   try {
-    const products = await pool.query("SELECT * FROM products");
-
-    // return products
-    // res.send(products);
-    res.send(products);
+    const [products]: any = await pool.query("SELECT * FROM products");
+    if (products.length === 0) {
+      return res.status(204).send({ error: "No products found", products: null });
+    } else {
+      return res.status(200).send({ error: "Products fetched Successfully", products: products });
+    }
   } catch (error) {
-    console.error("Error getting products:", error);
     res.status(500).send({ error: "Internal Server Error" });
   }
 });

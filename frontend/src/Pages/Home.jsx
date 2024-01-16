@@ -3,7 +3,7 @@ import Notifications from "../Components/Notifications";
 import { Outlet, useNavigate } from "react-router-dom";
 import Socket from "../utils/Socket.config";
 
-export default function Home({ setUser }) {
+export default function Home({ setUser, user }) {
   const navigate = useNavigate();
   return (
     <div style={{ display: "flex" }}>
@@ -41,10 +41,13 @@ export default function Home({ setUser }) {
             Logout
           </button>
         </div>
+        <div>
+          <h1>SHOP ID: {user?.shop_id}</h1>
+        </div>
         <Outlet />
       </div>
       <div style={{ height: "100vh", width: "30%", borderLeft: "black solid 1px" }}>
-        <Notifications />
+        <Notifications user={user} />
       </div>
     </div>
   );

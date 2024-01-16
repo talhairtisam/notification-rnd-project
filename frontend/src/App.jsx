@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Socket from "./utils/Socket.config";
 import Login from "./Pages/Login";
-import Notifications from "./Components/Notifications";
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home";
 import Products from "./Pages/Products";
@@ -14,19 +12,6 @@ import SignUp from "./Pages/SignUp";
 function App() {
   const [logedInUser, setLogedInUser] = useState();
 
-  useEffect(() => {
-    if (Socket.socket) {
-      Socket.socket.on("initiate", (data) => {
-        console.log(data);
-      });
-    }
-    return () => {
-      if (Socket.socket) {
-        Socket.socket.off("initiate");
-      }
-    };
-  }, [Socket.socket]);
-
   return (
     <BrowserRouter>
       <Routes>
@@ -35,7 +20,7 @@ function App() {
             path="*"
             element={
               <Routes>
-                <Route path="/" element={<Home setUser={setLogedInUser} />}>
+                <Route path="/" element={<Home setUser={setLogedInUser} user={logedInUser} />}>
                   <Route index element={<Dashboard />} />
                   <Route path="products" element={<Outlet />}>
                     <Route index element={<Products user={logedInUser} />} />
@@ -57,26 +42,6 @@ function App() {
         )}
       </Routes>
     </BrowserRouter>
-    // <div>
-    //   {logedInUser ? (
-    //     <>
-    //       <h1>
-    //         HOME [User ID: {logedInUser}]{" "}
-    //         <button
-    //           onClick={() => {
-    //             Socket.disconnect();
-    //             setLogedInUser(undefined);
-    //           }}
-    //         >
-    //           Logout
-    //         </button>
-    //       </h1>
-    //       <Notifications />
-    //     </>
-    //   ) : (
-    //     <Login setUser={setLogedInUser} />
-    //   )}
-    // </div>
   );
 }
 

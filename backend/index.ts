@@ -8,6 +8,8 @@ import SocketConfig from "./utils/socket.config";
 import reservationSubscriber from "./subscribers/reservation.subscriber";
 import users from "./controllers/users.controller";
 import products from "./controllers/products.controller";
+import notifications from "./controllers/notifications.controller";
+import notificationModel from "./models/notifications.model";
 
 const app = express();
 app.use(cors());
@@ -29,7 +31,10 @@ socketInstance.io.on("connection", (socket: any) => {
   if (userId) {
     RedisService.initRedis().then((redisClient: any) => {
       redisClient.sAdd(userId, socket.id);
-      socket.emit("initiate", "Welcome to Socket Connection");
+    });
+    const id = userId.split(":")[1];
+    notificationModel.getAll(+id).then((result: any) => {
+      socket.emit("initiate", { notifications: result });
     });
   }
 
@@ -45,6 +50,7 @@ socketInstance.io.on("connection", (socket: any) => {
 
 app.use("/users", users);
 app.use("/products", products);
+app.use("/notifications", notifications);
 
 app.use((err: any, req: any, res: any, next: any) => {
   // if (err.code === 401) {

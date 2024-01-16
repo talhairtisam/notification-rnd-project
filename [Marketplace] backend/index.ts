@@ -5,9 +5,8 @@ import RedisService from "./redis.config";
 // import subscriber from "./subscriber";
 import reservation from "./reservation";
 import SocketConfig from "./socket.config";
-import signup from "./signup";
-import signin from "./signin"
-import product from './products'
+import users from "./users";
+import product from "./products";
 
 const app = express();
 app.use(cors());
@@ -23,18 +22,18 @@ const socketInstance = SocketConfig.getInstance();
 // });
 
 socketInstance.io.on("connection", (socket: any) => {
-  const { username } = socket.handshake.query;
-  if (username) {
+  const { userId } = socket.handshake.query;
+  if (userId) {
     RedisService.initRedis().then((redisClient: any) => {
-      redisClient.sAdd(username, socket.id);
+      redisClient.sAdd(userId, socket.id);
       socket.emit("initiate", "Welcome to Socket Connection");
     });
   }
 
   socket.on("disconnect", () => {
-    if (username) {
+    if (userId) {
       RedisService.initRedis().then((redisClient: any) => {
-        redisClient.sRem(username, socket.id);
+        redisClient.sRem(userId, socket.id);
         console.log("Sockets Disconnected.");
       });
     }
@@ -42,10 +41,8 @@ socketInstance.io.on("connection", (socket: any) => {
 });
 
 app.use("/reserve", reservation);
-app.use("/signin",signin )
-app.use('/signup',signup )
-app.use('/products',product)
-
+app.use("/users", users);
+app.use("/products", product);
 
 httpServer.listen(5009, () => {
   console.log("listening on port 5009");
