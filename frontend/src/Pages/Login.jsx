@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Socket from "../utils/Socket.config";
+// import Socket from "../utils/Socket.config";
+import { useSocket } from "../utils/useSocket";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -7,14 +8,14 @@ export default function Login({ setUser }) {
   const [error, setError] = useState("");
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
-
+  const socket = useSocket();
   const handleLogin = async (e) => {
     try {
       e.preventDefault();
       if (username.length > 0) {
         const response = await axios.post("http://localhost:5008/users/login", { username });
         if (response.data.user) {
-          Socket.getConnection(response.data.user.user_id);
+          socket.getConnecion(response.data.user.user_id);
           setUser(response.data.user);
           setUsername("");
           navigate("/");

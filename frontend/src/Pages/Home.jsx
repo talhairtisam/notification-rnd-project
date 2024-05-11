@@ -1,10 +1,12 @@
 import React from "react";
 import Notifications from "../Components/Notifications";
 import { Outlet, useNavigate } from "react-router-dom";
-import Socket from "../utils/Socket.config";
+// import Socket from "../utils/Socket.config";
+import { useSocket } from "../utils/useSocket";
 
 export default function Home({ setUser, user }) {
   const navigate = useNavigate();
+  const socket = useSocket();
   return (
     <div style={{ display: "flex" }}>
       <div style={{ height: "100vh", width: "70%" }}>
@@ -33,7 +35,7 @@ export default function Home({ setUser, user }) {
           </button>
           <button
             onClick={() => {
-              Socket.disconnect();
+              socket.disconnect();
               setUser(undefined);
               navigate("/login");
             }}

@@ -1,31 +1,32 @@
 import React, { useEffect, useState } from "react";
-import Socket from "../utils/Socket.config";
+// import Socket from "../utils/Socket.config";
+import { useSocket } from "../utils/useSocket";
 import axios from "axios";
 
 export default function Notifications({ user }) {
   const [notification, setNotification] = useState([]);
-
+  const socket = useSocket();
   useEffect(() => {
-    if (Socket.socket) {
-      Socket.socket.on("initiate", (data) => {
+    if (socket.socket) {
+      socket.socket.on("initiate", (data) => {
         setNotification(data.notifications);
       });
-      Socket.socket.on("liveNotification", (data) => {
+      socket.socket.on("liveNotification", (data) => {
         setNotification((prev) => [...prev, data]);
       });
-      Socket.socket.on("updateNotification", (data) => {
+      socket.socket.on("updateNotification", (data) => {
         console.log("dddddd", data);
         setNotification((prev) => prev.map((noti) => (+noti.notification_id === +data ? { ...noti, is_read: true } : noti)));
       });
     }
     return () => {
-      if (Socket.socket) {
-        Socket.socket.off("liveNotification");
-        Socket.socket.off("initiate");
-        Socket.socket.off("updateNotification");
+      if (socket.socket) {
+        socket.socket.off("liveNotification");
+        socket.socket.off("initiate");
+        socket.socket.off("updateNotification");
       }
     };
-  }, [Socket.socket]);
+  }, [socket.socket]);
 
   return (
     <div>
